@@ -14,7 +14,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Assimp REQUIRED)
 
-add_library(ss ss.cpp)
+add_library(ss ss.cpp boundary_forces.cpp)
 
 #add_executable(sphere_sampling main.cpp)
 
