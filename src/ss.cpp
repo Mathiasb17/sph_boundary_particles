@@ -1,4 +1,4 @@
-#include "ss.h"
+#include <sph_boundary_particles/ss.h>
 #include <glm/gtx/string_cast.hpp>
 
 #include <array>

@@ -1,4 +1,4 @@
-#include "boundary_forces.h"
+#include <sph_boundary_particles/boundary_forces.h>
 
 #include <cmath>
 
