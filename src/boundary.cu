@@ -29,16 +29,16 @@ extern "C"
 
 		/*//kernel call*/
 		
-		/*unsigned int numThreads, numBlocks;*/
-		/*computeGridSiz(num_boundaries, 256, numBlocks, numThreads);*/
+		unsigned int numThreads, numBlocks;
+		computeGridSiz(num_boundaries, 256, numBlocks, numThreads);
 
 		/*computeVbi<<<numBlocks, numThreads>>>((float4*)boundary_pos, d_vbi, ir,num_boundaries);*/
 
 		/*//transfer back to host mem*/
-		/*cudaMemcpy(vbi, d_vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);*/
+		cudaMemcpy(vbi, d_vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);
 
 		/*//cudaFree*/
-		/*cudaFree(d_boundary_pos);*/
-		/*cudaFree(d_vbi);*/
+		cudaFree(d_boundary_pos);
+		cudaFree(d_vbi);
 	}
 }
