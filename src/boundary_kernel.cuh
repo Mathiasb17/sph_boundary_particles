@@ -35,8 +35,8 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 		{
 			if (index != i) 
 			{
-				float3 pos2 = make_float3(bpos[i]);
-				float3 p1p2 = pos - pos2;
+				float3 p2 = make_float3(bpos[i]);
+				float3 p1p2 = p1 - p2;
 				if (length(p1p2) <= ir)
 				{
 					/*float kpol = Wpoly(p1p2, ir);*/
