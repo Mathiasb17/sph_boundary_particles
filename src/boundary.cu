@@ -17,27 +17,27 @@ extern "C"
 
 	void updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries)
 	{
-		float* d_boundary_pos, * d_vbi;
+   /*     float* d_boundary_pos, * d_vbi;*/
 
-		cudaMalloc((void**)&d_boundary_pos, num_boundaries*4*sizeof(float));
-		cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));
+		/*cudaMalloc((void**)&d_boundary_pos, num_boundaries*4*sizeof(float));*/
+		/*cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));*/
 
-		//cudaMemcpy
-		cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);
-		cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);
+		/*//cudaMemcpy*/
+		/*cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);*/
+		/*cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);*/
 
-		//kernel call
+		/*//kernel call*/
 		
-		unsigned int numThreads, numBlocks;
-		computeGridSiz(num_boundaries, 256, numBlocks, numThreads);
+		/*unsigned int numThreads, numBlocks;*/
+		/*computeGridSiz(num_boundaries, 256, numBlocks, numThreads);*/
 
-		/*computeVbi<<<numBlocks, numThreads>>>((float4*)boundary_pos, d_vbi, ir,num_boundaries);*/
+		/*[>computeVbi<<<numBlocks, numThreads>>>((float4*)boundary_pos, d_vbi, ir,num_boundaries);<]*/
 
-		//transfer back to host mem
-		cudaMemcpy(vbi, d_vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);
+		/*//transfer back to host mem*/
+		/*cudaMemcpy(vbi, d_vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);*/
 
-		//cudaFree
-		cudaFree(d_boundary_pos);
-		cudaFree(d_vbi);
+		/*//cudaFree*/
+		/*cudaFree(d_boundary_pos);*/
+		/*cudaFree(d_vbi);*/
 	}
 }
