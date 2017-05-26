@@ -10,6 +10,9 @@
 #include <helper_math.h>
 #include <helper_cuda.h>
 
+#define GLM_FORCE_CUDA
+#include <glm/glm.hpp>
+
 __device__ float Wpoly(float3 ij, float h)
 {
 	float poly = 315.f / (M_PI*powf(h,9));
@@ -20,14 +23,18 @@ __device__ float Wpoly(float3 ij, float h)
 	return (poly* (powf(h*h - len*len,3)));
 }
 
-__global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
+__global__ void computeVbi(glm::vec4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
 {
 	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
+	
+
 	/*printf("bpos[0].x = %f\n", bpos[0].x);*/
-	printf("vbi[0] = %f\n", vbi[0]);
 	if (index < num_boundaries) 
 	{
+		glm::vec4 p1 = bpos[index];
+		printf("p1 = %8f %8f %8f\n", p1.x, p1.y, p1.z);
+
    /*     float4 pos = bpos[index];*/
 		/*float3 p1; p1.x = pos.x; p1.y = pos.y; p1.z = pos.z;*/
 

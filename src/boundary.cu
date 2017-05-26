@@ -20,7 +20,7 @@ extern "C"
 		float* d_boundary_pos;
 		float* d_vbi;
 
-		cudaMalloc((void**)&d_boundary_pos, num_boundaries*4*sizeof(float));
+		cudaMalloc((void**)&d_boundary_pos, num_boundaries*sizeof(glm::vec4));
 		cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));
 
 		//cudaMemcpy
