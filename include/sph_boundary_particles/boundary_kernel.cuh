@@ -2,14 +2,13 @@
 #define BOUNDARY_KERNEL_CUH
 
 #include <cuda_runtime.h>
-#include <helper_functions.h>
-#include <helper_cuda.h>
 
 #include <stdio.h>
 #include <math.h>
 
+#include <helper_functions.h>
 #include <helper_math.h>
-#include <math_constants.h>
+#include <helper_cuda.h>
 
 __device__ float Wpoly(float3 ij, float h)
 {

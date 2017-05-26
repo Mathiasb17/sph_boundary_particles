@@ -4,16 +4,13 @@
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 
-#include <helper_cuda.h>
-#include <helper_cuda_gl.h>
-
 #include <helper_functions.h>
+#include <helper_math.h>
+#include <helper_cuda.h>
 
 #include <stdio.h>
 #include <math.h>
 
-#include <helper_math.h>
-#include <math_constants.h>
 
 #include "boundary_kernel.cuh"
 

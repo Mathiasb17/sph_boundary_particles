@@ -24,7 +24,7 @@ message(${CUDA_NVCC_FLAGS})
 
 include_directories(./include)
 
-include_directories(/usr/local/cuda-7.5/include/)
+include_directories(/usr/local/cuda/include/)
 include_directories(/usr/local/cuda-7.5/samples/common/inc)
 
 CUDA_INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
