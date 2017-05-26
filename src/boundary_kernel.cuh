@@ -1,6 +1,7 @@
 #ifndef BOUNDARY_KERNEL_CUH
 #define BOUNDARY_KERNEL_CUH
 
+#include <cuda.h>
 #include <cuda_runtime.h>
 
 #include <stdio.h>
