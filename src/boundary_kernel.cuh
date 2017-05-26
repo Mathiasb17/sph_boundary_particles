@@ -24,7 +24,8 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 {
 	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
-	printf("bpos[0].x = %f\n", bpos[0].x);
+	/*printf("bpos[0].x = %f\n", bpos[0].x);*/
+	printf("vbi[0] = %f\n", vbi[0]);
 	if (index < num_boundaries) 
 	{
    /*     float4 pos = bpos[index];*/
