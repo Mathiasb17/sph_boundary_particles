@@ -39,21 +39,8 @@ float Wij(glm::vec3 ij, float h)
 //====================================================================================================  
 void boundary_forces::getVbi(std::vector<float> & vbi, std::vector<glm::vec4> boundary_spheres, float interaction_radius)
 {
-	//for (unsigned int i = 0; i < boundary_spheres.size(); ++i) 
-	//{
-		//float res = 0.f;
-		//for (unsigned int j = 0; j < boundary_spheres.size(); ++j)
-		//{
-			//if (i != j) 
-			//{
-				//glm::vec3 p1p2 = boundary_spheres[i].xyz() - boundary_spheres[j].xyz();
-				//res += Wij(p1p2, interaction_radius);
-			//}	
-		//}
-		//vbi.push_back( ( 1.f / res ) );
-	//}
 	vbi.resize(boundary_spheres.size(),0);
-	updateVbi((float*)boundary_spheres.data(), vbi.data(), interaction_radius, boundary_spheres.size());
+	updateVbi((float*)boundary_spheres.data(), (float*)vbi.data(), interaction_radius, boundary_spheres.size());
 }
 
 } 

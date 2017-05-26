@@ -23,8 +23,6 @@ extern "C"
 		cudaMalloc((void**)&d_boundary_pos, num_boundaries*4*sizeof(float));
 		cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));
 
-		printf("boundary_pos = %8f %8f %8f\n", boundary_pos[0], boundary_pos[1], boundary_pos[2]);
-
 		//cudaMemcpy
 		cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_boundary_pos, boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);

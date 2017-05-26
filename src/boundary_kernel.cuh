@@ -24,29 +24,29 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 {
 	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
+	printf("bpos[0].x = %f\n", bpos[0].x);
 	if (index < num_boundaries) 
 	{
-		float4 pos = bpos[index];
-		float3 p1; p1.x = pos.x; p1.y = pos.y; p1.z = pos.z;
-		/*printf("p1 = %8f %8f %8f\n", p1.x, p1.y, p1.z);*/
+   /*     float4 pos = bpos[index];*/
+		/*float3 p1; p1.x = pos.x; p1.y = pos.y; p1.z = pos.z;*/
 
-		float res = 0.f;
-		for (int i = 0; i < num_boundaries; ++i) 
-		{
-			if (index != i) 
-			{
-				float3 p2 = make_float3(bpos[i]);
-				float3 p1p2 = p1 - p2;
-				if (length(p1p2) <= ir)
-				{
-					/*float kpol = Wpoly(p1p2, ir);*/
-					/*printf("kpol = %f\n", kpol);*/
-					/*res += Wpoly(p1p2,ir);*/
-				}
-			}	
-		}
-		/*printf("res = %f\n", res);*/
-		vbi[index] = res;
+		/*float res = 0.f;*/
+		/*for (int i = 0; i < num_boundaries; ++i) */
+		/*{*/
+			/*if (index != i) */
+			/*{*/
+				/*float3 p2 = make_float3(bpos[i]);*/
+				/*float3 p1p2 = p1 - p2;*/
+				/*if (length(p1p2) <= ir)*/
+				/*{*/
+					/*[>float kpol = Wpoly(p1p2, ir);<]*/
+					/*[>printf("kpol = %f\n", kpol);<]*/
+					/*[>res += Wpoly(p1p2,ir);<]*/
+				/*}*/
+			/*}	*/
+		/*}*/
+		/*[>printf("res = %f\n", res);<]*/
+		/*vbi[index] = res;*/
 	}
 }
 
