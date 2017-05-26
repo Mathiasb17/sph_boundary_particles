@@ -11,14 +11,10 @@
 #include <helper_math.h>
 #include <helper_cuda.h>
 
-#define GLM_FORCE_CUDA
-#define GLM_COMPILER 0
-#include <glm/glm.hpp>
-
-__device__ float Wpoly(float3 ij, float h)
+__device__ float Wpoly(glm::vec3 ij, float h)
 {
 	float poly = 315.f / (M_PI*powf(h,9));
-	float len = length(ij);
+	float len = glm::length(ij);
 
 	if (len > h) return 0.f ;
 
