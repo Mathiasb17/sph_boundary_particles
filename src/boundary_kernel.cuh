@@ -10,8 +10,8 @@
 #include <helper_math.h>
 #include <helper_cuda.h>
 
-#define GLM_COMPILER 0
 #define GLM_FORCE_CUDA
+#define GLM_COMPILER 0
 #include <glm/glm.hpp>
 
 __device__ float Wpoly(float3 ij, float h)
