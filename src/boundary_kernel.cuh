@@ -22,25 +22,25 @@ __device__ float Wpoly(float3 ij, float h)
 
 __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
 {
-   /* unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;*/
+	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
-	/*if (index < num_boundaries) */
-	/*{*/
-		/*float3 pos1 = make_float3(bpos[index]);*/
+	if (index < num_boundaries) 
+	{
+		float3 pos1 = make_float3(bpos[index]);
 
-		/*float res = 0.f;*/
-		/*for (int i = 0; i < num_boundaries; ++i) */
-		/*{*/
+		float res = 0.f;
+		for (int i = 0; i < num_boundaries; ++i) 
+		{
 			/*if (index != i) */
 			/*{*/
 				/*float3 pos2 = make_float3(bpos[i]);*/
 				/*float3 p1p2 = pos1 - pos2;*/
 				/*res += Wpoly(p1p2,ir);*/
 			/*}	*/
-		/*}*/
-		/*[>printf("res = %f\n", res);<]*/
-		/*[>vbi[index] = res;<]*/
-	/*}*/
+		}
+		printf("res = %f\n", res);
+		vbi[index] = res;
+	}
 }
 
 #endif /* ifndef BOUNDARY_KERNEL */
