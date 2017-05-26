@@ -33,7 +33,6 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 		{
 			if (index != i) 
 			{
-				printf("pos1 = %8f %8f %8f\n", pos1.x, pos1.y, pos1.z);
 				float3 pos2 = make_float3(bpos[i]);
 				float3 p1p2 = pos1 - pos2;
 				if (length(p1p2) <= ir)
