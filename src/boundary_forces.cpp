@@ -1,5 +1,5 @@
 #include <sph_boundary_particles/boundary_forces.h>
-//#include <sph_boundary_particles/boundary.cuh>
+#include "boundary.cuh"
 
 #include <cmath>
 
@@ -53,8 +53,7 @@ void boundary_forces::getVbi(std::vector<float> & vbi, std::vector<glm::vec4> bo
 		//vbi.push_back( ( 1.f / res ) );
 	//}
 	vbi.resize(boundary_spheres.size(),0);
-	//updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries)
-
+	updateVbi((float*)boundary_spheres.data(), vbi.data(), interaction_radius, boundary_spheres.size());
 }
 
 } 

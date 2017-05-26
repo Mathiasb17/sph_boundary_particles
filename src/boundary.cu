@@ -1,4 +1,6 @@
-#include <sph_boundary_particles/boundary.cuh>
+#include "boundary.cuh"
+
+#include "boundary_kernel.cuh"
 
 extern "C"
 {

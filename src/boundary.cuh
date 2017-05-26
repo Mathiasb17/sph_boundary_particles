@@ -11,9 +11,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
-#include "boundary_kernel.cuh"
-
 extern "C"
 {
 	void updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries);
