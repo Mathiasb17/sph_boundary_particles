@@ -4,15 +4,15 @@
 
 extern "C"
 {
-	unsigned int iDivUp(unsigned int a, unsigned int b)
+	unsigned int iDivU(unsigned int a, unsigned int b)
 	{
 		return (a % b != 0) ? (a / b + 1) : (a / b);
 	}
 
-	void computeGridSize(unsigned int n, unsigned int blockSize, unsigned int &numBlocks, unsigned int &numThreads)
+	void computeGridSiz(unsigned int n, unsigned int blockSize, unsigned int &numBlocks, unsigned int &numThreads)
 	{
 		numThreads = min(blockSize, n);
-		numBlocks = iDivUp(n, numThreads);
+		numBlocks = iDivU(n, numThreads);
 	}
 
 	void updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries)
@@ -29,7 +29,7 @@ extern "C"
 		//kernel call
 		
 		unsigned int numThreads, numBlocks;
-		computeGridSize(num_boundaries, 256, numBlocks, numThreads);
+		computeGridSiz(num_boundaries, 256, numBlocks, numThreads);
 
 		computeVbi<<<numBlocks, numThreads>>>((float4*)boundary_pos, d_vbi, ir,num_boundaries);
 
