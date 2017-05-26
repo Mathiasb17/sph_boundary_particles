@@ -9,14 +9,30 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++-4.9")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(glfw3 3.2 REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+#find_package(glfw3 3.2 REQUIRED)
+#find_package(OpenGL REQUIRED)
+#find_package(GLEW REQUIRED)
 find_package(Assimp REQUIRED)
+find_package(CUDA REQUIRED)
+
+#CUDA OPTIONS
+set(CUDA_64_BIT_DEVICE_CODE ON)
+set(NVCC_FLAGS_EXTRA ${NVCC_FLAGS_EXTRA} -D_FORCE_INLINES)
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_35,code=sm_35 -gencode arch=compute_52,code=sm_52 --use_fast_math -Xptxas -O3 --maxrregcount 40") 
+
+message(${CUDA_NVCC_FLAGS})
 
 include_directories(./include)
 
-add_library(ss src/ss.cpp src/boundary_forces.cpp)
+include_directories(/usr/local/cuda-7.5/include/)
+include_directories(/usr/local/cuda-7.5/samples/common/inc)
+
+CUDA_INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+
+set(CUDA_SOURCES  src/boundary.cu)
+CUDA_COMPILE(CUDA_OBJ ${CUDA_SOURCES}) 
+
+add_library(ss src/ss.cpp src/boundary_forces.cpp ${CUDA_OBJ})
 
 #add_executable(sphere_sampling main.cpp)
 
