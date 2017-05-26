@@ -37,11 +37,13 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 				float3 p1p2 = pos1 - pos2;
 				if (length(p1p2) <= ir)
 				{
-					res += Wpoly(p1p2,ir);
+					float kpol = Wpoly(p1p2, ir);
+					printf("kpol = %f\n", kpol);
+					/*res += Wpoly(p1p2,ir);*/
 				}
 			}	
 		}
-		printf("res = %f\n", res);
+		/*printf("res = %f\n", res);*/
 		vbi[index] = res;
 	}
 }
