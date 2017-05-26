@@ -17,14 +17,15 @@ extern "C"
 
 	void updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries)
 	{
-		float* d_boundary_pos, * d_vbi;
+		float* d_boundary_pos;
+		float* d_vbi;
 
 		cudaMalloc((void**)&d_boundary_pos, num_boundaries*4*sizeof(float));
 		cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));
 
-		/*//cudaMemcpy*/
-		/*cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);*/
-		/*cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);*/
+		//cudaMemcpy
+		cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyHostToDevice);
+		cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);
 
 		/*//kernel call*/
 		
