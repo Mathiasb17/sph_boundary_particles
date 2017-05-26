@@ -26,7 +26,7 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 
 	if (index < num_boundaries) 
 	{
-   /*     float3 pos1 = make_float3(bpos[index]);*/
+		float3 pos1 = make_float3(bpos[index]);
 
 		/*float res = 0.f;*/
 		/*for (int i = 0; i < num_boundaries; ++i) */
