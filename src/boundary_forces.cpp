@@ -40,7 +40,7 @@ float Wij(glm::vec3 ij, float h)
 void boundary_forces::getVbi(std::vector<float> & vbi, std::vector<glm::vec4> boundary_spheres, float interaction_radius)
 {
 	vbi.resize(boundary_spheres.size(),0);
-	updateVbi(boundary_spheres.data(), (float*)vbi.data(), interaction_radius, boundary_spheres.size());
+	updateVbi((float*)boundary_spheres.data(), (float*)vbi.data(), interaction_radius, boundary_spheres.size());
 }
 
 } 

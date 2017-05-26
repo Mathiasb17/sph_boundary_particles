@@ -20,7 +20,7 @@ extern "C"
 		float* d_boundary_pos;
 		float* d_vbi;
 
-		cudaMalloc((void**)&d_boundary_pos, num_boundaries*sizeof(glm::vec4));
+		cudaMalloc((void**)&d_boundary_pos, num_boundaries*sizeof(float)*4);
 		cudaMalloc((void**)&d_vbi, num_boundaries*sizeof(float));
 
 		//cudaMemcpy
@@ -32,7 +32,7 @@ extern "C"
 		unsigned int numThreads, numBlocks;
 		computeGridSiz(num_boundaries, 256, numBlocks, numThreads);
 
-		computeVbi<<<numBlocks, numThreads>>>((float4*)boundary_pos, d_vbi, ir,num_boundaries);
+		computeVbi<<<numBlocks, numThreads>>>((float4*)d_boundary_pos, d_vbi, ir,num_boundaries);
 
 		/*//transfer back to host mem*/
 		cudaMemcpy(vbi, d_vbi, num_boundaries*sizeof(float), cudaMemcpyDeviceToHost);
