@@ -40,7 +40,7 @@ __global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num
 				res += Wpoly(p1p2,ir);
 			}	
 		}
-		vbi[index] = res;
+		vbi[index] = 1.f / res;
 	}
 }
 
