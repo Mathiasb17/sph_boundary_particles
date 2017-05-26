@@ -25,7 +25,7 @@ extern "C"
 
 		//cudaMemcpy
 		cudaMemcpy(d_vbi, vbi, num_boundaries*sizeof(float), cudaMemcpyHostToDevice);
-		cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);
+		/*cudaMemcpy(boundary_pos, d_boundary_pos, num_boundaries*sizeof(float)*4, cudaMemcpyHostToDevice);*/
 
 		/*//kernel call*/
 		
