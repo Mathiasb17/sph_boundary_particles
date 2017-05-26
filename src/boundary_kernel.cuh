@@ -10,6 +10,7 @@
 #include <helper_math.h>
 #include <helper_cuda.h>
 
+#define GLM_COMPILER 0
 #define GLM_FORCE_CUDA
 #include <glm/glm.hpp>
 
