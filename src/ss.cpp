@@ -60,7 +60,15 @@ void ss::sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres,
 		}
 
 		sampleMeshEdges(_mesh, boundary_spheres, radius);
-		sampleMeshFaces(_mesh, boundary_spheres, radius);
+
+		for (int i = 0; i < _mesh.faces.size(); i+=3)
+		{
+			const glm::vec3 p1 = _mesh.vertices[_mesh.faces[i]].xyz();
+			const glm::vec3 p2 = _mesh.vertices[_mesh.faces[i+1]].xyz();
+			const glm::vec3 p3 = _mesh.vertices[_mesh.faces[i+2]].xyz();
+			sampleMeshFaces(boundary_spheres, radius, p1, p2, p3);
+		}
+
 	}
 	aiReleaseImport( scene);
 }
@@ -217,110 +225,99 @@ bool LineLineIntersect(
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleMeshFaces(const mesh m, std::vector<glm::vec4> & spheres, float radius)
+void ss::sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 {
-	//sampling triangle interiors
-	
-	float particleDiameter = radius*2.f;
-	for (unsigned int i = 0; i < m.faces.size(); i += 3) 
-	{
-		
-		glm::vec3 p1 = m.vertices[m.faces[i]].xyz();
-		glm::vec3 p2 = m.vertices[m.faces[i+1]].xyz();
-		glm::vec3 p3 = m.vertices[m.faces[i+2]].xyz();
+	float particleDiameter = radius * 2.f;
 
-		std::array< glm::vec3, 3> v = {{p1, p2, p3}};
-		std::array< glm::vec3, 3 > edgesV = {{v[1]-v[0], v[2]-v[1], v[0]-v[2]}};
-		std::array< glm::vec2, 3 > edgesI = {{glm::vec2(0,1), glm::vec2(1,2), glm::vec2(2,0)}};
-		std::array< float, 3> edgesL = {{ glm::length(edgesV[0]), glm::length(edgesV[1]), glm::length(edgesV[2]) }};
-		//spheres.push_back(m.vertices[i]);
-		
-		//Edges
-		int pNumber=0;
-		glm::vec3 pe(0,0,0);
-		for(int j=0; j<3; ++j)
-		{
-			pNumber = std::floor(edgesL[j]/particleDiameter);
-			pe = edgesV[j]/(float)pNumber;
-			for(int k=0; k<pNumber; ++k)
-			{
-				glm::vec3 p = v[edgesI[j][0]] + (float)k*pe;
-				//samples.push_back(p);
-			}
-		}
+    std::array< glm::vec3, 3> v = {{p1, p2, p3}};
+    std::array< glm::vec3, 3 > edgesV = {{v[1]-v[0], v[2]-v[1], v[0]-v[2]}};
+    std::array< glm::vec2, 3 > edgesI = {{glm::vec2(0,1), glm::vec2(1,2), glm::vec2(2,0)}};
+    std::array< float, 3> edgesL = {{ glm::length(edgesV[0]), glm::length(edgesV[1]), glm::length(edgesV[2]) }};
+    //samples.clear();
 
-		//Triangles
-		int sEdge=-1,lEdge=-1;
-		float maxL = -std::numeric_limits<float>::max();
-		float minL = std::numeric_limits<float>::max();
-		for(int i=0; i<3; ++i)
-		{
-			if(edgesL[i]>maxL)
-			{
-				maxL = edgesL[i];
-				lEdge = i;
-			}
-			if(edgesL[i]<minL)
-			{
-				minL = edgesL[i];
-				sEdge = i;
-			}
-		}
-		glm::vec3 cross, normal;
-		cross = glm::cross(edgesV[lEdge], edgesV[sEdge]);
-		normal = glm::cross(edgesV[sEdge], cross);
-		glm::normalize(normal);
+    //Edges
+    int pNumber=0;
+	glm::vec3 pe(0,0,0);
+    for(int i=0; i<3; ++i)
+    {
+        pNumber = std::floor(edgesL[i]/particleDiameter);
+        pe = edgesV[i]/(float)pNumber;
+        for(int j=0; j<pNumber; ++j)
+        {
+			glm::vec3 p = v[edgesI[i][0]] + (float)j*pe;
+            //samples.push_back(p);
+        }
+    }
 
-		std::array<bool, 3> findVertex = {{true, true, true}};
-		findVertex[edgesI[sEdge][0]] = false;
-		findVertex[edgesI[sEdge][1]] = false;
-		int thirdVertex = -1;
-		for(size_t i=0; i<findVertex.size(); ++i)
-			if(findVertex[i]==true)
-				thirdVertex = i;
-		glm::vec3 tmpVec  = v[thirdVertex] - v[edgesI[sEdge][0]];
-		float sign = glm::dot(normal, tmpVec);
-		if(sign<0)
-			normal = -normal;
+    //Triangles
+    int sEdge=-1,lEdge=-1;
+    float maxL = -std::numeric_limits<float>::max();
+    float minL = std::numeric_limits<float>::max();
+    for(int i=0; i<3; ++i)
+    {
+        if(edgesL[i]>maxL)
+        {
+            maxL = edgesL[i];
+            lEdge = i;
+        }
+        if(edgesL[i]<minL)
+        {
+            minL = edgesL[i];
+            sEdge = i;
+        }
+    }
+	glm::vec3 cross, normal;
+    cross = glm::cross(edgesV[lEdge], edgesV[sEdge]);
+    normal = glm::cross(edgesV[sEdge], cross);
+    normal = normal / glm::length(normal);
 
-		float triangleHeight = std::abs(glm::dot(normal, edgesV[lEdge]));
-		int sweepSteps = triangleHeight/particleDiameter;
-		bool success = false;
+    std::array<bool, 3> findVertex = {{true, true, true}};
+    findVertex[edgesI[sEdge][0]] = false;
+    findVertex[edgesI[sEdge][1]] = false;
+    int thirdVertex = -1;
+    for(size_t i=0; i<findVertex.size(); ++i)
+        if(findVertex[i]==true)
+            thirdVertex = i;
+	glm::vec3 tmpVec  = v[thirdVertex] - v[edgesI[sEdge][0]];
+    float sign = glm::dot(normal, tmpVec);
+    if(sign<0)
+        normal = -normal;
 
-		glm::vec3 sweepA, sweepB, i1, i2, o1, o2;
-		float m1, m2;
-		int edge1,edge2;
-		edge1 = (sEdge+1)%3;
-		edge2 = (sEdge+2)%3;
+    float triangleHeight = std::abs(glm::dot(normal, edgesV[lEdge]));
+    int sweepSteps = triangleHeight/particleDiameter;
+    bool success = false;
 
-		for(int i=1; i<sweepSteps; ++i)
-		{
-			sweepA = v[edgesI[sEdge][0]] + (float)i*particleDiameter*normal;
-			sweepB = v[edgesI[sEdge][1]] + (float)i*particleDiameter*normal;
-			success = LineLineIntersect(v[edgesI[edge1][0]], v[edgesI[edge1][1]], sweepA, sweepB, o1, o2, m1, m2);
-			i1 = o1;
-			if(success == false)
-			{
-				std::cout << "Intersection 1 failed" << std::endl;
-			}
-			success = LineLineIntersect(v[edgesI[edge2][0]], v[edgesI[edge2][1]], sweepA, sweepB, o1, o2, m1, m2);
-			i2 = o1;
-			if(success == false)
-			{
-				std::cout << "Intersection 1 failed" << std::endl;
-			}
-			glm::vec3 s = i1-i2;
-			int step = std::floor(s.length()/particleDiameter);
-			glm::vec3 ps = s/((float)step);
-			for(int j=1; j<step; ++j)
-			{
-				glm::vec3 p = i2 + (float)j*ps;
-				glm::vec4 pfinal(p,1.f);
-				spheres.push_back(pfinal);
-			}
-		}
-		
-	}
+	glm::vec3 sweepA, sweepB, i1, i2, o1, o2;
+    float m1, m2;
+    int edge1,edge2;
+    edge1 = (sEdge+1)%3;
+    edge2 = (sEdge+2)%3;
+
+    for(int i=1; i<sweepSteps; ++i)
+    {
+        sweepA = v[edgesI[sEdge][0]] + (float)i*particleDiameter*normal;
+        sweepB = v[edgesI[sEdge][1]] + (float)i*particleDiameter*normal;
+        success = LineLineIntersect(v[edgesI[edge1][0]], v[edgesI[edge1][1]], sweepA, sweepB, o1, o2, m1, m2);
+        i1 = o1;
+        if(success == false)
+        {
+            std::cout << "Intersection 1 failed" << std::endl;
+        }
+        success = LineLineIntersect(v[edgesI[edge2][0]], v[edgesI[edge2][1]], sweepA, sweepB, o1, o2, m1, m2);
+        i2 = o1;
+        if(success == false)
+        {
+            std::cout << "Intersection 1 failed" << std::endl;
+        }
+		glm::vec3 s = i1-i2;
+        int step = std::floor(glm::length(s)/particleDiameter);
+		glm::vec3 ps = s/((float)step);
+        for(int j=1; j<step; ++j)
+        {
+			glm::vec3 p = i2 + (float)j*ps;
+            spheres.push_back(glm::vec4(p, 1.f));
+        }
+    }
 }
 
 //==================================================================================================== 

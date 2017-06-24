@@ -34,7 +34,7 @@ public:
 
 	static void sampleMeshVertices(const mesh m, std::vector<glm::vec4> & spheres, float radius);
 	static void sampleMeshEdges(mesh & m, std::vector<glm::vec4> & spheres, float radius);
-	static void sampleMeshFaces(const mesh m, std::vector<glm::vec4> & spheres, float radius);
+	static void sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
 	static void sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3 size, float radius);
 };

@@ -1,4 +1,4 @@
-#include "ss.h"
+#include <sph_boundary_particles/ss.h>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -464,7 +464,9 @@ int main(int argc, char *argv[])
 	std::string fname = "./ship.obj";
 	float radius = 0.02f;
 	std::vector<glm::vec4> boundary_spheres;
-	sample_spheres::ss::sampleBox(boundary_spheres, glm::vec3(-1,-1,-1), glm::vec3(2,2,2), 0.02);
+	//sample_spheres::ss::sampleBox(boundary_spheres, glm::vec3(-1,-1,-1), glm::vec3(2,2,2), 0.02);
+	sample_spheres::ss::sampleMesh("./plane.obj", boundary_spheres, 0.02);
+	sample_spheres::ss::sampleMesh("./bunny.obj", boundary_spheres, 0.02);
 
 	//opengl sphere buffers handling
 	getNewVbo(GL_ARRAY_BUFFER, &vbo_spheres_pos, boundary_spheres.size() * sizeof(glm::vec4), boundary_spheres.data(), GL_STATIC_DRAW);

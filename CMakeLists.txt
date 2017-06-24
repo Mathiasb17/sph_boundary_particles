@@ -34,7 +34,7 @@ CUDA_COMPILE(CUDA_OBJ ${CUDA_SOURCES})
 
 add_library(ss src/ss.cpp src/boundary_forces.cpp ${CUDA_OBJ})
 
-#add_executable(sphere_sampling main.cpp)
+#add_executable(sphere_sampling src/main.cpp)
 
 ##target_include_directories(sph ${OPENGL_INCLUDE_DIR})
 #target_link_libraries(sphere_sampling ${OPENGL_gl_LIBRARY})
