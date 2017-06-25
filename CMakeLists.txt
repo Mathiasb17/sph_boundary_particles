@@ -12,9 +12,11 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++-4.9")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+#UNCOMMENT THE 3 FOLLOWING TO TEST
 #find_package(glfw3 3.2 REQUIRED)
 #find_package(OpenGL REQUIRED)
 #find_package(GLEW REQUIRED)
+
 find_package(Assimp REQUIRED)
 find_package(CUDA REQUIRED)
 
@@ -37,12 +39,14 @@ CUDA_COMPILE(CUDA_OBJ ${CUDA_SOURCES})
 
 add_library(ss src/ss.cpp src/boundary_forces.cpp ${CUDA_OBJ})
 
-#add_executable(sphere_sampling src/main.cpp)
+target_link_libraries(ss ${ASSIMP_LIBRARIES})
 
-##target_include_directories(sph ${OPENGL_INCLUDE_DIR})
+#UNCOMMENT THE FOLLOWING TO TEST
+#add_executable(sphere_sampling src/main.cpp)
+#target_include_directories(sph ${OPENGL_INCLUDE_DIR})
 #target_link_libraries(sphere_sampling ${OPENGL_gl_LIBRARY})
 #target_link_libraries(sphere_sampling ${OPENGL_LIBRARIES})
 #target_link_libraries(sphere_sampling glfw ${GLFW_LIBRARIES})
 #target_link_libraries(sphere_sampling ${GLEW_LIBRARIES})
-target_link_libraries(ss ${ASSIMP_LIBRARIES})
 #target_link_libraries(sphere_sampling ss)
+

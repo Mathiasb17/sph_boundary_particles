@@ -1,5 +1,4 @@
 #include <sph_boundary_particles/ss.h>
-#include <glm/gtx/string_cast.hpp>
 
 #include <array>
 
@@ -19,7 +18,7 @@ ss::~ss (){}
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres, float radius)
+void ss::sampleMesh(std::string fname, std::vector<SVec4> &boundary_spheres, SReal radius)
 {
 	mesh _mesh;
 	const aiScene* scene = aiImportFile( fname.c_str(),
@@ -40,7 +39,7 @@ void ss::sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres,
 		//loop into current mesh for vertices
 		for (unsigned int j = 0; j < scene->mMeshes[i]->mNumVertices; ++j)
 		{
-			glm::vec4 p = glm::vec4(scene->mMeshes[i]->mVertices[j].x,
+			SVec4 p = make_SVec4(scene->mMeshes[i]->mVertices[j].x,
 					scene->mMeshes[i]->mVertices[j].y,
 					scene->mMeshes[i]->mVertices[j].z, 1);
 
@@ -63,9 +62,9 @@ void ss::sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres,
 
 		for (int i = 0; i < _mesh.faces.size(); i+=3)
 		{
-			const glm::vec3 p1 = _mesh.vertices[_mesh.faces[i]].xyz();
-			const glm::vec3 p2 = _mesh.vertices[_mesh.faces[i+1]].xyz();
-			const glm::vec3 p3 = _mesh.vertices[_mesh.faces[i+2]].xyz();
+			const SVec3 p1 = make_SVec3(_mesh.vertices[_mesh.faces[i]]);
+			const SVec3 p2 = make_SVec3(_mesh.vertices[_mesh.faces[i+1]]);
+			const SVec3 p3 = make_SVec3(_mesh.vertices[_mesh.faces[i+2]]);
 			sampleMeshFaces(boundary_spheres, radius, p1, p2, p3);
 		}
 
@@ -76,7 +75,7 @@ void ss::sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres,
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleMeshVertices(const mesh m, std::vector<glm::vec4> & spheres, float radius)
+void ss::sampleMeshVertices(const mesh m, std::vector<SVec4> & spheres, SReal radius)
 {
 	(void)radius;
 	for (unsigned int i = 0; i < m.vertices.size(); ++i) 
@@ -88,7 +87,7 @@ void ss::sampleMeshVertices(const mesh m, std::vector<glm::vec4> & spheres, floa
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleMeshEdges(mesh & m, std::vector<glm::vec4> & spheres, float radius)
+void ss::sampleMeshEdges(mesh & m, std::vector<SVec4> & spheres, SReal radius)
 {
 	//1ere etape : on recupere les aretes dans un ensemble pour garantir l'unicite des spheres generees
 	for (unsigned int i = 0; i < m.faces.size(); i += 3) 
@@ -157,17 +156,17 @@ void ss::sampleMeshEdges(mesh & m, std::vector<glm::vec4> & spheres, float radiu
 	for(it = m.edges.begin(); it != m.edges.end(); ++it)
 	{
 		
-		glm::vec4 p1 = m.vertices[it->first];
-		glm::vec4 p2 = m.vertices[it->second];
+		SVec4 p1 = m.vertices[it->first];
+		SVec4 p2 = m.vertices[it->second];
 
-		glm::vec4 edge = p2-p1;
-		float elen = glm::length(edge);
+		SVec4 edge = p2-p1;
+		SReal elen = length(edge);
 		int pNumber = std::floor(elen/(radius*2.f));
-		glm::vec4 pe = edge/(float)pNumber, p;
+		SVec4 pe = edge/(SReal)pNumber, p;
 
 		for(int i=1; i<pNumber; ++i)
 		{
-			p = p1 + (float)i*pe;
+			p = p1 + (SReal)i*pe;
 			spheres.push_back(p);
 		}
 	}
@@ -177,47 +176,47 @@ void ss::sampleMeshEdges(mesh & m, std::vector<glm::vec4> & spheres, float radiu
 //==================================================================================================== 
 //==================================================================================================== 
 bool LineLineIntersect(
-        const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& p4, glm::vec3& pa, glm::vec3& pb,
-        float & mua, float & mub)
+        const SVec3& p1, const SVec3& p2, const SVec3& p3, const SVec3& p4, SVec3& pa, SVec3& pb,
+        SReal & mua, SReal & mub)
 {
-	glm::vec3 p13,p43,p21;
-    float d1343,d4321,d1321,d4343,d2121;
-    float numer,denom;
+	SVec3 p13,p43,p21;
+    SReal d1343,d4321,d1321,d4343,d2121;
+    SReal numer,denom;
 
-    p13[0] = p1[0] - p3[0];
-    p13[1] = p1[1] - p3[1];
-    p13[2] = p1[2] - p3[2];
-    p43[0] = p4[0] - p3[0];
-    p43[1] = p4[1] - p3[1];
-    p43[2] = p4[2] - p3[2];
-    if (std::abs(p43[0]) < std::numeric_limits<float>::epsilon() && std::abs(p43[1]) < std::numeric_limits<float>::epsilon() && std::abs(p43[2]) < std::numeric_limits<float>::epsilon())
+    p13.x = p1.x - p3.x;
+    p13.y = p1.y - p3.y;
+    p13.z = p1.z - p3.z;
+    p43.x = p4.x - p3.x;
+    p43.y = p4.y - p3.y;
+    p43.z = p4.z - p3.z;
+    if (std::abs(p43.x) < std::numeric_limits<SReal>::epsilon() && std::abs(p43.y) < std::numeric_limits<SReal>::epsilon() && std::abs(p43.z) < std::numeric_limits<SReal>::epsilon())
         return false;
-    p21[0] = p2[0] - p1[0];
-    p21[1] = p2[1] - p1[1];
-    p21[2] = p2[2] - p1[2];
-    if (std::abs(p21[0]) < std::numeric_limits<float>::epsilon() && std::abs(p21[1]) < std::numeric_limits<float>::epsilon() && std::abs(p21[2]) < std::numeric_limits<float>::epsilon())
+    p21.x = p2.x - p1.x;
+    p21.y = p2.y - p1.y;
+    p21.z = p2.z - p1.z;
+    if (std::abs(p21.x) < std::numeric_limits<SReal>::epsilon() && std::abs(p21.y) < std::numeric_limits<SReal>::epsilon() && std::abs(p21.z) < std::numeric_limits<SReal>::epsilon())
         return false;
 
-    d1343 = p13[0] * p43[0] + p13[1] * p43[1] + p13[2] * p43[2];
-    d4321 = p43[0] * p21[0] + p43[1] * p21[1] + p43[2] * p21[2];
-    d1321 = p13[0] * p21[0] + p13[1] * p21[1] + p13[2] * p21[2];
-    d4343 = p43[0] * p43[0] + p43[1] * p43[1] + p43[2] * p43[2];
-    d2121 = p21[0] * p21[0] + p21[1] * p21[1] + p21[2] * p21[2];
+    d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
+    d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
+    d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
+    d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
+    d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
     denom = d2121 * d4343 - d4321 * d4321;
-    if (std::abs(denom) < std::numeric_limits<float>::epsilon())
+    if (std::abs(denom) < std::numeric_limits<SReal>::epsilon())
         return false;
     numer = d1343 * d4321 - d1321 * d4343;
 
     mua = numer / denom;
     mub = (d1343 + d4321 * (mua)) / d4343;
 
-    pa[0] = p1[0] + mua * p21[0];
-    pa[1] = p1[1] + mua * p21[1];
-    pa[2] = p1[2] + mua * p21[2];
-    pb[0] = p3[0] + mub * p43[0];
-    pb[1] = p3[1] + mub * p43[1];
-    pb[2] = p3[2] + mub * p43[2];
+    pa.x = p1.x + mua * p21.x;
+    pa.y = p1.y + mua * p21.y;
+    pa.z = p1.z + mua * p21.z;
+    pb.x = p3.x + mub * p43.x;
+    pb.y = p3.y + mub * p43.y;
+    pb.z = p3.z + mub * p43.z;
 
     return true;
 }
@@ -225,34 +224,34 @@ bool LineLineIntersect(
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+void ss::sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, SVec3 p1, SVec3 p2, SVec3 p3)
 {
-	float particleDiameter = radius * 2.f;
+	SReal particleDiameter = radius * 2.f;
 
-    std::array< glm::vec3, 3> v = {{p1, p2, p3}};
-    std::array< glm::vec3, 3 > edgesV = {{v[1]-v[0], v[2]-v[1], v[0]-v[2]}};
-    std::array< glm::vec2, 3 > edgesI = {{glm::vec2(0,1), glm::vec2(1,2), glm::vec2(2,0)}};
-    std::array< float, 3> edgesL = {{ glm::length(edgesV[0]), glm::length(edgesV[1]), glm::length(edgesV[2]) }};
+    std::array< SVec3, 3> v = {{p1, p2, p3}};
+    std::array< SVec3, 3 > edgesV = {{v[1]-v[0], v[2]-v[1], v[0]-v[2]}};
+    std::array< SVec2i, 3 > edgesI = {{make_int2(0,1), make_int2(1,2), make_int2(2,0)}};
+    std::array< SReal, 3> edgesL = {{ length(edgesV[0]), length(edgesV[1]), length(edgesV[2]) }};
     //samples.clear();
 
     //Edges
     int pNumber=0;
-	glm::vec3 pe(0,0,0);
+	SVec3 pe = make_SVec3(0,0,0);
     for(int i=0; i<3; ++i)
     {
         pNumber = std::floor(edgesL[i]/particleDiameter);
-        pe = edgesV[i]/(float)pNumber;
+        pe = edgesV[i]/(SReal)pNumber;
         for(int j=0; j<pNumber; ++j)
         {
-			glm::vec3 p = v[edgesI[i][0]] + (float)j*pe;
+			SVec3 p = v[edgesI[i].x] + (SReal)j*pe;
             //samples.push_back(p);
         }
     }
 
     //Triangles
     int sEdge=-1,lEdge=-1;
-    float maxL = -std::numeric_limits<float>::max();
-    float minL = std::numeric_limits<float>::max();
+    SReal maxL = -std::numeric_limits<SReal>::max();
+    SReal minL = std::numeric_limits<SReal>::max();
     for(int i=0; i<3; ++i)
     {
         if(edgesL[i]>maxL)
@@ -266,56 +265,56 @@ void ss::sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::ve
             sEdge = i;
         }
     }
-	glm::vec3 cross, normal;
-    cross = glm::cross(edgesV[lEdge], edgesV[sEdge]);
-    normal = glm::cross(edgesV[sEdge], cross);
-    normal = normal / glm::length(normal);
+	SVec3 cros, normal;
+    cros = cross(edgesV[lEdge], edgesV[sEdge]);
+    normal = cross(edgesV[sEdge], cros);
+    normal = normal / length(normal);
 
     std::array<bool, 3> findVertex = {{true, true, true}};
-    findVertex[edgesI[sEdge][0]] = false;
-    findVertex[edgesI[sEdge][1]] = false;
+    findVertex[edgesI[sEdge].x] = false;
+    findVertex[edgesI[sEdge].y] = false;
     int thirdVertex = -1;
     for(size_t i=0; i<findVertex.size(); ++i)
         if(findVertex[i]==true)
             thirdVertex = i;
-	glm::vec3 tmpVec  = v[thirdVertex] - v[edgesI[sEdge][0]];
-    float sign = glm::dot(normal, tmpVec);
+	SVec3 tmpVec  = v[thirdVertex] - v[edgesI[sEdge].x];
+    SReal sign = dot(normal, tmpVec);
     if(sign<0)
         normal = -normal;
 
-    float triangleHeight = std::abs(glm::dot(normal, edgesV[lEdge]));
+    SReal triangleHeight = fabs(dot(normal, edgesV[lEdge]));
     int sweepSteps = triangleHeight/particleDiameter;
     bool success = false;
 
-	glm::vec3 sweepA, sweepB, i1, i2, o1, o2;
-    float m1, m2;
+	SVec3 sweepA, sweepB, i1, i2, o1, o2;
+    SReal m1, m2;
     int edge1,edge2;
     edge1 = (sEdge+1)%3;
     edge2 = (sEdge+2)%3;
 
     for(int i=1; i<sweepSteps; ++i)
     {
-        sweepA = v[edgesI[sEdge][0]] + (float)i*particleDiameter*normal;
-        sweepB = v[edgesI[sEdge][1]] + (float)i*particleDiameter*normal;
-        success = LineLineIntersect(v[edgesI[edge1][0]], v[edgesI[edge1][1]], sweepA, sweepB, o1, o2, m1, m2);
+        sweepA = v[edgesI[sEdge].x] + (SReal)i*particleDiameter*normal;
+        sweepB = v[edgesI[sEdge].y] + (SReal)i*particleDiameter*normal;
+        success = LineLineIntersect(v[edgesI[edge1].x], v[edgesI[edge1].y], sweepA, sweepB, o1, o2, m1, m2);
         i1 = o1;
         if(success == false)
         {
             std::cout << "Intersection 1 failed" << std::endl;
         }
-        success = LineLineIntersect(v[edgesI[edge2][0]], v[edgesI[edge2][1]], sweepA, sweepB, o1, o2, m1, m2);
+        success = LineLineIntersect(v[edgesI[edge2].x], v[edgesI[edge2].y], sweepA, sweepB, o1, o2, m1, m2);
         i2 = o1;
         if(success == false)
         {
             std::cout << "Intersection 1 failed" << std::endl;
         }
-		glm::vec3 s = i1-i2;
-        int step = std::floor(glm::length(s)/particleDiameter);
-		glm::vec3 ps = s/((float)step);
+		SVec3 s = i1-i2;
+        int step = floor(length(s)/particleDiameter);
+		SVec3 ps = s/((SReal)step);
         for(int j=1; j<step; ++j)
         {
-			glm::vec3 p = i2 + (float)j*ps;
-            spheres.push_back(glm::vec4(p, 1.f));
+			SVec3 p = i2 + (SReal)j*ps;
+            spheres.push_back(make_SVec4(p, 1.f));
         }
     }
 }
@@ -323,19 +322,19 @@ void ss::sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::ve
 //==================================================================================================== 
 //==================================================================================================== 
 //==================================================================================================== 
-void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3 size, float radius)
+void ss::sampleBox(std::vector<SVec4> & spheres, SVec3 center, SVec3 size, SReal radius)
 {
-	float spacing = radius * 2.f;
+	SReal spacing = radius * 2.f;
 	int epsilon = 0;
-    int widthSize = std::floor(size[0]/spacing);
-    int heightSize = std::floor(size[1]/spacing);
-    int depthSize = std::floor(size[2]/spacing);
+    int widthSize = std::floor(size.x/spacing);
+    int heightSize = std::floor(size.y/spacing);
+    int depthSize = std::floor(size.z/spacing);
 
 	for(int i = -epsilon; i <= widthSize+epsilon; ++i)
 	{
 		for(int j = -epsilon; j <= depthSize+epsilon; ++j)
 		{
-			spheres.push_back(glm::vec4(center[0]+i*spacing, center[1], center[2]+j*spacing, 1.f));
+			spheres.push_back(make_SVec4(center.x+i*spacing, center.y, center.z+j*spacing, 1.f));
 		}
 	}
 
@@ -343,7 +342,7 @@ void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3
     {
         for(int j = -epsilon; j <= depthSize+epsilon; ++j)
         {
-            spheres.push_back(glm::vec4(center[0]+i*spacing, center[1]+size[1], center[2]+j*spacing, 1.f));
+            spheres.push_back(make_SVec4(center.x+i*spacing, center.y+size.y, center.z+j*spacing, 1.f));
         }
     }
 
@@ -351,7 +350,7 @@ void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3
     {
         for(int j = -epsilon; j <= heightSize+epsilon; ++j)
         {
-            spheres.push_back(glm::vec4(center[0]+i*spacing, center[1]+j*spacing, center[2], 1.f));
+            spheres.push_back(make_SVec4(center.x+i*spacing, center.y+j*spacing, center.z, 1.f));
         }
     }
 
@@ -359,7 +358,7 @@ void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3
     {
         for(int j = -epsilon; j <= heightSize-epsilon; ++j)
         {
-            spheres.push_back(glm::vec4(center[0]+i*spacing, center[1]+j*spacing, center[2]+size[2], 1.f));
+            spheres.push_back(make_SVec4(center.x+i*spacing, center.y+j*spacing, center.z+size.z, 1.f));
         }
     }
 
@@ -367,7 +366,7 @@ void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3
     {
         for(int j = -epsilon; j <= depthSize+epsilon; ++j)
         {
-            spheres.push_back(glm::vec4(center[0], center[1]+i*spacing, center[2]+j*spacing, 1.f));
+            spheres.push_back(make_SVec4(center.x, center.y+i*spacing, center.z+j*spacing, 1.f));
         }
     }
 
@@ -375,7 +374,7 @@ void ss::sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3
     {
         for(int j = -epsilon; j <= depthSize+epsilon; ++j)
         {
-            spheres.push_back(glm::vec4(center[0]+size[0], center[1]+i*spacing, center[2]+j*spacing, 1.f));
+            spheres.push_back(make_SVec4(center.x+size.x, center.y+i*spacing, center.z+j*spacing, 1.f));
         }
     }
 }

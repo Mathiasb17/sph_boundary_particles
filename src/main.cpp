@@ -87,7 +87,7 @@ const char * fragment_shader_basic =
 "  frag_colour = fcol;"
 "}";
 
-SVec4 cube_points[8];SVec4 cube_colors[8]; unsigned int cube_indices[36];
+glm::vec4 cube_points[8];glm::vec4 cube_colors[8]; unsigned int cube_indices[36];
 
 void initCube()
 {
@@ -463,7 +463,7 @@ int main(int argc, char *argv[])
 	
 	std::string fname = "./ship.obj";
 	SReal radius = 0.02f;
-	std::vector<glm::vec4> boundary_spheres;
+	std::vector<SVec4> boundary_spheres;
 	//sample_spheres::ss::sampleBox(boundary_spheres, glm::vec3(-1,-1,-1), glm::vec3(2,2,2), 0.02);
 	sample_spheres::ss::sampleMesh("./plane.obj", boundary_spheres, 0.02);
 	sample_spheres::ss::sampleMesh("./bunny.obj", boundary_spheres, 0.02);

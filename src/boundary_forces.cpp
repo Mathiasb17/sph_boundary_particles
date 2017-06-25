@@ -28,7 +28,7 @@ SReal Wij(SVec3 ij, SReal h)
 {
 	static SReal poly = 315.f / (M_PI*powf(h,9));
 
-	SReal len = glm::length(ij);
+	SReal len = length(ij);
 
 	if (len > h) return 0.f ;
 
@@ -37,7 +37,7 @@ SReal Wij(SVec3 ij, SReal h)
 //====================================================================================================  
 //====================================================================================================  
 //====================================================================================================  
-void boundary_forces::getVbi(std::vector<SReal> & vbi, std::vector<glm::vec4> boundary_spheres, SReal interaction_radius)
+void boundary_forces::getVbi(std::vector<SReal> & vbi, std::vector<SVec4> boundary_spheres, SReal interaction_radius)
 {
 	vbi.resize(boundary_spheres.size(),0);
 	updateVbi((SReal*)boundary_spheres.data(), (SReal*)vbi.data(), interaction_radius, boundary_spheres.size());

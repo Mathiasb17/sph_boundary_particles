@@ -36,9 +36,9 @@ public:
 
 	static void sampleMeshVertices(const mesh m, std::vector<SVec4> & spheres, SReal radius);
 	static void sampleMeshEdges(mesh & m, std::vector<SVec4> & spheres, SReal radius);
-	static void sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	static void sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, SVec3 p1, SVec3 p2, SVec3 p3);
 
-	static void sampleBox(std::vector<SVec4> & spheres, glm::vec3 center, glm::vec3 size, SReal radius);
+	static void sampleBox(std::vector<SVec4> & spheres, SVec3 center, SVec3 size, SReal radius);
 };
 
 };
