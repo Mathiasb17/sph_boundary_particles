@@ -87,7 +87,7 @@ const char * fragment_shader_basic =
 "  frag_colour = fcol;"
 "}";
 
-glm::vec4 cube_points[8];glm::vec4 cube_colors[8]; unsigned int cube_indices[36];
+SVec4 cube_points[8];SVec4 cube_colors[8]; unsigned int cube_indices[36];
 
 void initCube()
 {
@@ -236,7 +236,7 @@ void displaySpheres(glm::mat4 mat_mvp, glm::mat4 mat_mv, GLuint shader_program, 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 
-	glUniform1f(glGetUniformLocation(shader_program, "pointScale"), height / tanf(45.f*0.5f*(float)M_PI/180.0f));
+	glUniform1f(glGetUniformLocation(shader_program, "pointScale"), height / tanf(45.f*0.5f*(SReal)M_PI/180.0f));
 	glUniform1f(glGetUniformLocation(shader_program, "pointRadius"), particle_radius);
 
 	glUniformMatrix4fv(glGetUniformLocation(shader_program, "MVP"), 1, false, glm::value_ptr(mat_mvp));
@@ -273,7 +273,7 @@ GLuint vs_sphere, fs_sphere, vs_basic, fs_basic;
 GLuint shader_program_spheres, shader_program_basic;
 
 glm::mat4 mvp;
-float fov = 45.f;
+SReal fov = 45.f;
 glm::vec4 campos(4,0,0,1);
 
 bool do_simulation = false;
@@ -345,8 +345,8 @@ void move_camera_direction(GLFWwindow* win, glm::vec4* dir)
 
 void move_camera_rotate(GLFWwindow * win, glm::mat4 *mvp)
 {
-	static float rotateAroundY = 0.f;
-	static float rotateAroundX = 0.f;
+	static SReal rotateAroundY = 0.f;
+	static SReal rotateAroundX = 0.f;
 
 	int mouse_left_state = glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_RIGHT);
 	if (mouse_left_state == GLFW_PRESS || mouse_left_state == GLFW_REPEAT)
@@ -443,7 +443,7 @@ void displayFPS()
 	nbFrame++;
 	if (currentTime - lastTime >= 1.0)
 	{
-		std::cout << "fps = " << (float)nbFrame << std::endl;	
+		std::cout << "fps = " << (SReal)nbFrame << std::endl;	
 		nbFrame = 0;
 		lastTime = currentTime;
 	}
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 	initCube();
 	
 	std::string fname = "./ship.obj";
-	float radius = 0.02f;
+	SReal radius = 0.02f;
 	std::vector<glm::vec4> boundary_spheres;
 	//sample_spheres::ss::sampleBox(boundary_spheres, glm::vec3(-1,-1,-1), glm::vec3(2,2,2), 0.02);
 	sample_spheres::ss::sampleMesh("./plane.obj", boundary_spheres, 0.02);
@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
 		glm::vec4 camPos = glm::vec4(0,0,4,1) + camMove;
 
 		glm::mat4 v = glm::lookAt(camPos.xyz(), direction.xyz(), glm::vec4(0,1,0, 0).xyz());
-		glm::mat4 p = glm::perspective(fov,(float)width/float(height), 0.1f, 100.f);
+		glm::mat4 p = glm::perspective(fov,(SReal)width/SReal(height), 0.1f, 100.f);
 		mvp = p*v*m;
 		move_camera_rotate(window,&mvp);
 

@@ -9,6 +9,8 @@
 
 #include <glm/glm.hpp>
 
+#include "common.h"
+
 namespace sample_spheres
 {
 
@@ -18,7 +20,7 @@ public:
 	boundary_forces ();
 	virtual ~boundary_forces ();
 
-	static void getVbi(std::vector<float> & vbi, std::vector<glm::vec4> boundary_spheres, float interaction_radius);
+	static void getVbi(std::vector<SReal> & vbi, std::vector< SVec4> boundary_spheres, SReal interaction_radius);
 
 private:
 	/* data */

@@ -24,11 +24,11 @@ boundary_forces::~boundary_forces ()
 //====================================================================================================  
 //====================================================================================================  
 //====================================================================================================  
-float Wij(glm::vec3 ij, float h)
+SReal Wij(SVec3 ij, SReal h)
 {
-	static float poly = 315.f / (M_PI*powf(h,9));
+	static SReal poly = 315.f / (M_PI*powf(h,9));
 
-	float len = glm::length(ij);
+	SReal len = glm::length(ij);
 
 	if (len > h) return 0.f ;
 
@@ -37,10 +37,10 @@ float Wij(glm::vec3 ij, float h)
 //====================================================================================================  
 //====================================================================================================  
 //====================================================================================================  
-void boundary_forces::getVbi(std::vector<float> & vbi, std::vector<glm::vec4> boundary_spheres, float interaction_radius)
+void boundary_forces::getVbi(std::vector<SReal> & vbi, std::vector<glm::vec4> boundary_spheres, SReal interaction_radius)
 {
 	vbi.resize(boundary_spheres.size(),0);
-	updateVbi((float*)boundary_spheres.data(), (float*)vbi.data(), interaction_radius, boundary_spheres.size());
+	updateVbi((SReal*)boundary_spheres.data(), (SReal*)vbi.data(), interaction_radius, boundary_spheres.size());
 }
 
 } 

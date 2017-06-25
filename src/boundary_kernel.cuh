@@ -11,7 +11,7 @@
 #include <helper_math.h>
 #include <helper_cuda.h>
 
-__device__ float Wpoly(float3 ij, float h)
+__device__ float Wpoly(SVec3 ij, float h)
 {
 	float poly = 315.f / (M_PI*powf(h,9));
 	float len = length(ij);
@@ -21,21 +21,21 @@ __device__ float Wpoly(float3 ij, float h)
 	return (poly* (powf(h*h - len*len,3)));
 }
 
-__global__ void computeVbi(float4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
+__global__ void computeVbi(SVec4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
 {
 	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
 	if (index < num_boundaries) 
 	{
-		float3 p1 = make_float3(bpos[index]);
+		SVec3 p1 = glm::vec3(bpos[index]);
 
 		float res = 0.f;
 		for (int i = 0; i < num_boundaries; ++i) 
 		{
 			if (index != i) 
 			{
-				float3 p2 = make_float3(bpos[i]);
-				float3 p1p2 = p1 - p2;
+				SVec3 p2 = glm::vec3(bpos[i]);
+				SVec3 p1p2 = p1 - p2;
 				float kpol = Wpoly(p1p2, ir);
 				res += Wpoly(p1p2,ir);
 			}	

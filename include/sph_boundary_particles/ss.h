@@ -6,6 +6,8 @@
 #endif /* ifndef GLM_SWIZZLE */
 #include <glm/glm.hpp>
 
+#include "common.h"
+
 #include <iostream>
 #include <vector>
 #include <set>
@@ -19,7 +21,7 @@ namespace sample_spheres
 
 struct mesh
 {
-	std::vector<glm::vec4 > vertices;
+	std::vector<SVec4 > vertices;
 	std::set< std::pair< int , int > > edges;
 	std::vector<unsigned int > faces;
 };
@@ -30,13 +32,13 @@ public:
 	ss ();
 	virtual ~ss ();
 
-	static void sampleMesh(std::string fname, std::vector<glm::vec4> &boundary_spheres, float radius);
+	static void sampleMesh(std::string fname, std::vector<SVec4> &boundary_spheres, SReal radius);
 
-	static void sampleMeshVertices(const mesh m, std::vector<glm::vec4> & spheres, float radius);
-	static void sampleMeshEdges(mesh & m, std::vector<glm::vec4> & spheres, float radius);
-	static void sampleMeshFaces(std::vector<glm::vec4> & spheres, float radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	static void sampleMeshVertices(const mesh m, std::vector<SVec4> & spheres, SReal radius);
+	static void sampleMeshEdges(mesh & m, std::vector<SVec4> & spheres, SReal radius);
+	static void sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
-	static void sampleBox(std::vector<glm::vec4> & spheres, glm::vec3 center, glm::vec3 size, float radius);
+	static void sampleBox(std::vector<SVec4> & spheres, glm::vec3 center, glm::vec3 size, SReal radius);
 };
 
 };

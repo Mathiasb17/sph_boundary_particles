@@ -12,9 +12,11 @@
 #include <stdio.h>
 #include <math.h>
 
+#include <sph_boundary_particles/common.h>
+
 extern "C"
 {
-	void updateVbi(float* boundary_pos, float* vbi, float ir, unsigned int num_boundaries);
+	void updateVbi(SReal* boundary_pos, SReal* vbi, SReal ir, unsigned int num_boundaries);
 }
 
 #endif /* ifndef BOUNDARY_CUH */

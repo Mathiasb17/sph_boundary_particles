@@ -1,0 +1,3 @@
+/home/mathias/sample_spheres/build/CMakeFiles/edit_cache.dir
+/home/mathias/sample_spheres/build/CMakeFiles/rebuild_cache.dir
+/home/mathias/sample_spheres/build/CMakeFiles/ss.dir
