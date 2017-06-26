@@ -230,7 +230,7 @@ void ss::sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, SVec3 p1, S
 
     std::array< SVec3, 3> v = {{p1, p2, p3}};
     std::array< SVec3, 3 > edgesV = {{v[1]-v[0], v[2]-v[1], v[0]-v[2]}};
-    std::array< SVec2i, 3 > edgesI = {{make_int2(0,1), make_int2(1,2), make_int2(2,0)}};
+    std::array< int2, 3 > edgesI = {{make_int2(0,1), make_int2(1,2), make_int2(2,0)}};
     std::array< SReal, 3> edgesL = {{ length(edgesV[0]), length(edgesV[1]), length(edgesV[2]) }};
     //samples.clear();
 
