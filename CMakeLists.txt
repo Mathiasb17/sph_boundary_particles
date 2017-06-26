@@ -12,6 +12,8 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++-4.9")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+add_definitions(-DDOUBLE_PRECISION=1)
+
 #UNCOMMENT THE 3 FOLLOWING TO TEST
 #find_package(glfw3 3.2 REQUIRED)
 #find_package(OpenGL REQUIRED)
@@ -28,9 +30,10 @@ set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_35,code=sm_35 -gen
 message(${CUDA_NVCC_FLAGS})
 
 include_directories(./include)
+include_directories(./include/sph_boundary_particles)
 
 include_directories(/usr/local/cuda/include/)
-include_directories(/usr/local/cuda/samples/common/inc)
+#include_directories(/usr/local/cuda/samples/common/inc)
 
 CUDA_INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
 

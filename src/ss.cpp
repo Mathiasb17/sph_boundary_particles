@@ -1,6 +1,7 @@
 #include <sph_boundary_particles/ss.h>
 
 #include <array>
+#include <sph_boundary_particles/helper_math.h>
 
 namespace sample_spheres
 {
@@ -313,8 +314,8 @@ void ss::sampleMeshFaces(std::vector<SVec4> & spheres, SReal radius, SVec3 p1, S
 		SVec3 ps = s/((SReal)step);
         for(int j=1; j<step; ++j)
         {
-			SVec3 p = i2 + (SReal)j*ps;
-            spheres.push_back(make_SVec4(p, 1.f));
+			SVec3 p = i2 + ( ps*(SReal)j );
+            spheres.push_back(make_SVec4(p.x, p.y, p.z, 1.f));
         }
     }
 }

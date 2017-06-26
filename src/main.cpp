@@ -185,7 +185,7 @@ void getNewVao(GLuint *newVao, GLuint vbo_pos)
 	glGenVertexArrays(1, newVao);
 	glBindVertexArray(*newVao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(0, 4, GL_REAL, GL_FALSE, 0, NULL);
 }
 
 void getNewVao(GLuint *newVao, GLuint vbo_pos, GLuint vbo_col)
@@ -193,9 +193,9 @@ void getNewVao(GLuint *newVao, GLuint vbo_pos, GLuint vbo_col)
 	glGenVertexArrays(1, newVao);
 	glBindVertexArray(*newVao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(0, 4, GL_REAL, GL_FALSE, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(1, 4, GL_REAL, GL_FALSE, 0, NULL);
 }
 
 void getNewVao(GLuint *newVao, GLuint vbo_pos, GLuint vbo_col, GLuint vbo_indices)
@@ -203,11 +203,11 @@ void getNewVao(GLuint *newVao, GLuint vbo_pos, GLuint vbo_col, GLuint vbo_indice
 	glGenVertexArrays(1, newVao);
 	glBindVertexArray(*newVao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(0, 4, GL_REAL, GL_FALSE, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(1, 4, GL_REAL, GL_FALSE, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(2, 4, GL_REAL, GL_FALSE, 0, NULL);
 }
 
 void compileVertexAndFragmentShaders(GLuint *vs, GLuint *fs, const GLchar **string_vs, const GLchar **string_fs)

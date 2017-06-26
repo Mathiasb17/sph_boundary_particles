@@ -5,12 +5,12 @@
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 
-#include <helper_functions.h>
-#include <helper_math.h>
-#include <helper_cuda.h>
+#include <sph_boundary_particles/helper_functions.h>
+#include <sph_boundary_particles/helper_math.h>
+#include <sph_boundary_particles/helper_cuda.h>
 
 #include <stdio.h>
-#include <math.h>
+/*#include <math.h>*/
 
 #include <sph_boundary_particles/common.h>
 

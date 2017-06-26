@@ -5,23 +5,23 @@
 #include <cuda_runtime.h>
 
 #include <stdio.h>
-#include <math.h>
+/*#include <math.h>*/
 
-#include <helper_functions.h>
-#include <helper_math.h>
-#include <helper_cuda.h>
+#include <sph_boundary_particles/helper_functions.h>
+#include <sph_boundary_particles/helper_math.h>
+#include <sph_boundary_particles/helper_cuda.h>
 
-__device__ float Wpoly(SVec3 ij, float h)
+__device__ SReal Wpoly(SVec3 ij, SReal h)
 {
-	float poly = 315.f / (M_PI*powf(h,9));
-	float len = length(ij);
+	SReal poly = 315.f / (M_PI*powf(h,9));
+	SReal len = length(ij);
 
 	if (len > h) return 0.f ;
 
 	return (poly* (powf(h*h - len*len,3)));
 }
 
-__global__ void computeVbi(SVec4 * bpos, float* vbi, float ir, unsigned int num_boundaries)
+__global__ void computeVbi(SVec4 * bpos, SReal* vbi, SReal ir, unsigned int num_boundaries)
 {
 	unsigned int index = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -29,18 +29,18 @@ __global__ void computeVbi(SVec4 * bpos, float* vbi, float ir, unsigned int num_
 	{
 		SVec3 p1 = make_SVec3(bpos[index]);
 
-		float res = 0.f;
+		SReal res = 0.0;
 		for (int i = 0; i < num_boundaries; ++i) 
 		{
 			if (index != i) 
 			{
 				SVec3 p2 = make_SVec3(bpos[i]);
 				SVec3 p1p2 = p1 - p2;
-				float kpol = Wpoly(p1p2, ir);
+				SReal kpol = Wpoly(p1p2, ir);
 				res += Wpoly(p1p2,ir);
 			}	
 		}
-		vbi[index] = 1.f / res;
+		vbi[index] = 1.0 / res;
 	}
 }
 

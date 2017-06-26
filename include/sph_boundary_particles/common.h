@@ -1,9 +1,7 @@
 #ifndef COMMON_H
-#define COMMON_H 
+#define COMMON_H
 
-#include <helper_functions.h>
-#include <helper_math.h>
-#include <helper_cuda.h>
+#include <cuda_runtime.h>
 
 #if DOUBLE_PRECISION == 1
 typedef double SReal;
