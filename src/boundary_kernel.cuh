@@ -13,12 +13,33 @@
 
 __device__ SReal Wpoly(SVec3 ij, SReal h)
 {
-	SReal poly = 315.f / (M_PI*powf(h,9));
+	SReal poly = 315.0 / (M_PI*powf(h,9));
 	SReal len = length(ij);
 
-	if (len > h) return 0.f ;
+	if (len > h) return 0.0 ;
 
 	return (poly* (powf(h*h - len*len,3)));
+}
+
+__device__ __host__ SReal Wmonaghan(SVec3 r, SReal h)
+{
+	SReal value = 0.f;
+	SReal m_invH = 1.f  / h;
+	SReal m_v = 1.0/(4.0*M_PI*h*h*h);
+    SReal q = length(r)*m_invH;
+    if( q >= 0 && q < 1 )
+    {
+        value = m_v*( (2-q)*(2-q)*(2-q) - 4.0f*(1-q)*(1-q)*(1-q));
+    }
+    else if ( q >=1 && q < 2 )
+    {
+        value = m_v*( (2-q)*(2-q)*(2-q) );
+    }
+    else
+    {
+        value = 0.0f;
+    }
+    return value;
 }
 
 __global__ void computeVbi(SVec4 * bpos, SReal* vbi, SReal ir, unsigned int num_boundaries)
@@ -36,8 +57,14 @@ __global__ void computeVbi(SVec4 * bpos, SReal* vbi, SReal ir, unsigned int num_
 			{
 				SVec3 p2 = make_SVec3(bpos[i]);
 				SVec3 p1p2 = p1 - p2;
-				SReal kpol = Wpoly(p1p2, ir);
-				res += Wpoly(p1p2,ir);
+				SReal kpol;
+
+#if KERNEL_SET == 0 //monaghan
+	kpol = Wmonaghan(p1p2, ir);
+#elif KERNEL_SET == 1 //muller
+	kpol = Wpoly(p1p2,ir);
+#endif
+				res += kpol;
 			}	
 		}
 		vbi[index] = 1.0 / res;
