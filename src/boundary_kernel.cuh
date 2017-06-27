@@ -58,13 +58,13 @@ __global__ void computeVbi(SVec4 * bpos, SReal* vbi, SReal ir, unsigned int num_
 				SVec3 p2 = make_SVec3(bpos[i]);
 				SVec3 p1p2 = p1 - p2;
 #if KERNEL_SET == 1
-				res += Wpoly(p1p2,ir);
+				res += 1.0 / Wpoly(p1p2,ir);
 #elif KERNEL_SET == 0
-				res += Wmonaghan(p1p2, ir);
+				res += 1.0 / Wmonaghan(p1p2, ir);
 #endif
 			}	
 		}
-		vbi[index] = 1.0 / res;
+		vbi[index] = res;
 	}
 }
 
